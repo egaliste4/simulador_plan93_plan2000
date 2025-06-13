@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Adaptación - Licenciatura Plan 93 a Plan 2000 en Filosofía - UCM</title>
+    <style>
+        /* --- ESTILOS GENERALES (Idénticos al simulador anterior, se pueden externalizar a un CSS común si se usan ambos) --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); /* Un color diferente para distinguirlo del otro simulador */
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 2.2rem; margin-bottom: 8px; font-weight: 400; }
+        .header p { font-size: 1rem; opacity: 0.85; }
+        .content { padding: 30px; }
+
+        /* --- SECCIÓN DE BÚSQUEDA --- */
+        .search-section { margin-bottom: 30px; }
+        .search-container { position: relative; margin-bottom: 15px; }
+        .search-input {
+            width: 100%;
+            padding: 12px 18px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        .search-input:focus {
+            outline: none; border-color: #34495e; background: white; /* Color de foco acorde al header */
+            box-shadow: 0 0 0 2px rgba(52, 73, 94, 0.2);
+        }
+        .subject-list {
+            background: #f8f9fa; border-radius: 8px;
+            max-height: 300px; overflow-y: auto; border: 1px solid #ced4da;
+        }
+        .subject-item {
+            padding: 12px 18px; cursor: pointer; border-bottom: 1px solid #e9ecef;
+            transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center;
+        }
+        .subject-item.selected-for-adaptation { background-color: #dfe6e9; color: #2d3436; } /* Grisáceo para selección */
+        .subject-item.selected-for-adaptation:hover { background-color: #ced6e0; }
+        .subject-item:hover { background: #f1f2f6; }
+        .subject-item:last-child { border-bottom: none; }
+        .subject-name { font-weight: 500; color: #212529; flex-grow: 1; }
+        .subject-details-plan93 { font-size: 0.85rem; color: #6c757d; margin-left: 10px; white-space: nowrap; }
+        .subject-code { background: #e9ecef; padding: 3px 7px; border-radius: 4px; margin-right: 5px;}
+
+
+        /* --- SECCIÓN DE RESULTADOS --- */
+        .results-section { animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .results-header {
+            background: linear-gradient(135deg, #607D8B 0%, #455A64 100%); color: white; /* Tonos grises/azules */
+            padding: 18px 25px; border-radius: 8px; margin-bottom: 25px; text-align: center;
+        }
+        .results-header h2 { font-size: 1.6rem; margin-bottom: 8px; }
+        #clear-selected-button, #print-summary-button {
+            background: #6c757d; color: white; border: none; padding: 10px 20px;
+            border-radius: 8px; cursor: pointer; font-size: 0.9rem;
+            transition: background-color 0.3s ease; margin-top: 15px;
+        }
+        #clear-selected-button { background-color: #dc3545;}
+        #clear-selected-button:hover { background-color: #c82333; }
+        #print-summary-button { background-color: #007bff;}
+        #print-summary-button:hover { background-color: #0056b3; }
+        .buttons-container { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px;}
+
+
+        .equivalences-container {
+            border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; background-color: #f8f9fa;
+        }
+        .plan93-block { /* Renombrado de licenciatura-block */
+            margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px dashed #adb5bd;
+        }
+        .plan93-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .plan93-block h3 {
+            font-size: 1.2rem; color: #34495e; margin-bottom: 5px; /* Color acorde al header */
+        }
+        .plan93-block .p93-details { font-size: 0.9rem; color: #555; margin-bottom: 12px; }
+
+        .equivalence-card { /* Para asignaturas Plan 2000 */
+            background: white; border: 1px solid #ced4da; border-radius: 8px; padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.04); margin-bottom: 15px;
+        }
+        .equivalence-card:last-child { margin-bottom: 0; }
+        /* .equivalence-type no es necesario aquí si la convalidación es directa a la asignatura Plan 2000 */
+        .equivalence-content h4 { font-size: 1.1rem; color: #343a40; margin-bottom: 3px; }
+        .equivalence-content .plan2000-details { font-size: 0.9rem; color: #555; margin-bottom: 8px; }
+
+
+        .no-results, .no-selected-subjects {
+            text-align: center; padding: 30px; color: #6c757d; font-size: 1rem;
+            background-color: #f8f9fa; border-radius: 8px; border: 1px dashed #ced4da;
+        }
+
+        /* --- SECCIÓN DE RESUMEN --- */
+        .summary-section {
+            background: #e9ecef; border-radius: 8px; padding: 20px; margin-top: 25px;
+            border-left: 3px solid #34495e; /* Color acorde al header */
+        }
+        .summary-section h3 { font-size: 1.3rem; color: #212529; margin-bottom: 12px; }
+        .summary-text { color: #495057; line-height: 1.6; }
+        .summary-text ul { list-style-position: inside; padding-left: 0; margin-bottom: 10px; }
+        .summary-text li { margin-bottom: 4px; }
+        .summary-text strong { color: #0056b3; }
+        .summary-credits { margin-top:15px; font-weight: bold; font-size: 1.1rem;}
+        .summary-credits p { margin-bottom: 5px; }
+
+
+        /* --- ESTILOS DE IMPRESIÓN (Ajustados para los nuevos nombres de clase si es necesario) --- */
+        @media print {
+            body { padding: 0; margin: 0; font-size: 10pt; background: #fff; color: #000; }
+            .container { box-shadow: none; border-radius: 0; border: none; max-width: 100%; }
+            .header, .search-section, #clear-selected-button, #print-summary-button, .no-results, .no-selected-subjects, .buttons-container {
+                display: none !important;
+            }
+            .results-section { display: block !important; animation: none; }
+            .results-header { background: #eee; color: #000; text-align: left; padding: 10px; border-bottom: 1px solid #ccc; }
+            .results-header h2 { font-size: 1.4rem; }
+            .equivalences-container { border: none; padding: 0; background-color: #fff; }
+            .plan93-block { page-break-inside: avoid; border-bottom: 1px solid #ccc; margin-bottom: 15px; padding-bottom: 10px; }
+            .plan93-block h3 { font-size: 1.1rem; color: #000; }
+            .equivalence-card { box-shadow: none; border: 1px solid #ddd; padding: 10px; page-break-inside: avoid; }
+            .equivalence-content h4 { font-size: 1rem; }
+            .summary-section { border-left: none; background: #fff; padding: 15px 0; margin-top: 20px; border-top: 2px solid #000; }
+            .summary-section h3 { font-size: 1.2rem; }
+            .summary-text ul { margin-bottom: 5px;}
+            .summary-text li { font-size: 9pt; }
+            .summary-credits p { font-size: 10pt; }
+            a[href]:after { content: ""; } 
+        }
+         @media (max-width: 768px) {
+            .header h1 { font-size: 1.8rem; }
+            .content { padding: 15px; }
+            .buttons-container { flex-direction: column; align-items: center; }
+            #clear-selected-button, #print-summary-button { width: 80%; margin-bottom: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Simulador de Adaptación</h1>
+            <p>De Licenciatura Plan 93 a Licenciatura Plan 2000 en Filosofía - UCM</p>
+        </div>
+
+        <div class="content">
+            <div id="search-section" class="search-section">
+                <div class="search-container">
+                    <input type="text" id="search-input" class="search-input" 
+                           placeholder="Busca y selecciona asignaturas del Plan 93...">
+                </div>
+                <div id="subject-list" class="subject-list"></div>
+            </div>
+
+            <div id="results-section" class="results-section" style="display: none;">
+                <div class="results-header">
+                    <h2>Asignaturas del Plan 2000 Reconocidas</h2>
+                </div>
+                <div id="equivalences-container" class="equivalences-container"></div>
+                <div id="no-selected-subjects" class="no-selected-subjects" style="display: none;">
+                    <p>No has seleccionado ninguna asignatura del Plan 93 para ver sus equivalencias.</p>
+                </div>
+                
+                <div class="buttons-container">
+                    <button id="clear-selected-button">Limpiar Selección</button>
+                    <button id="print-summary-button">Imprimir/Guardar Resumen PDF</button>
+                </div>
+
+                <div class="summary-section">
+                    <h3>📚 Resumen General de tu Adaptación al Plan 2000</h3>
+                    <div id="summary-text" class="summary-text">
+                        <p>Selecciona asignaturas del Plan 93 para ver el resumen.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="no-results" class="no-results" style="display: none;">
+                <p>No se encontraron asignaturas del Plan 93 con ese nombre/código.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATOS DE ADAPTACIÓN PLAN 93 a PLAN 2000 ---
+        const adaptationDataPlan93to2000 = [
+            // Los códigos UCM (1044XX) en plan2000.codigoOriginalUCM se usan para enlazar
+            // con los datos detallados del Plan 2000 que ya teníamos.
+            {
+                plan93: { codigo: "NO_CODE_P93_1", nombre: "Historia de la Filosofía Antigua + 1 Optativa" },
+                plan2000: [ { codigoOriginalUCM: "104439", nombre: "HISTORIA DE LA FILOSOFÍA ANTIGUA", caracter: "Troncal", creditos: 11 } ]
+            },
+            {
+                plan93: { codigo: "002", nombre: "Antropología I y Antropología II" },
+                plan2000: [ { codigoOriginalUCM: "104438", nombre: "ANTROPOLOGÍA", caracter: "Troncal", creditos: 11 } ]
+            },
+            {
+                plan93: { codigo: "005", nombre: "Lógica I y Lógica II" },
+                plan2000: [ { codigoOriginalUCM: "104440", nombre: "LÓGICA", caracter: "Troncal", creditos: 11 } ]
+            },
+            {
+                plan93: { codigo: "NO_CODE_P93_2", nombre: "Ontología + 1 Optativa" },
+                plan2000: [ { codigoOriginalUCM: "104441", nombre: "ONTOLOGÍA FUNDAMENTAL", caracter: "Obligatoria", creditos: 11 } ]
+            },
+            { // La tabla de adaptación original usa 104442, 104443, 104444 para las lenguas I del Plan 2000.
+              // Estas no tienen un código 2XX directo en esa tabla, así que mantengo el mapeo a su entrada de Plan 2000.
+              // Para simplificar, asumimos que "Lengua I y Lengua II" del Plan 93 cubre una de las opciones del Plan 2000.
+              // OJO: La tabla de adaptación P93->P2000 solo dice "Lengua I (Alemán o Latín o Griego)" para el Plan 2000.
+              // Usaré la entrada de "ALEMÁN PARA FILÓSOFOS I" del plan 2000 como representativa. Si esto debe ser más granular, se necesitaría más detalle.
+                plan93: { codigo: "NO_CODE_P93_3", nombre: "Lengua I y Lengua II" }, // Este mapeo es genérico
+                plan2000: [ { codigoOriginalUCM: "104442", nombre: "ALEMÁN PARA FILÓSOFOS I", caracter: "Obligatoria", creditos: 9 } ] // Representativo de Lengua I P2000
+            },
+            {
+                plan93: { codigo: "NO_CODE_P93_4", nombre: "Historia de la Filosofía Medieval + 1 Optativa" },
+                plan2000: [ { codigoOriginalUCM: "104445", nombre: "HISTORIA DE LA FILOSOFÍA MEDIEVAL", caracter: "Troncal", creditos: 11 } ]
+            },
+            {
+                plan93: { codigo: "018", nombre: "Filosofíadel Lenguaje I y Filosofía del Lenguaje II" }, // Corregido "Filosofíadel"
+                plan2000: [ { codigoOriginalUCM: "104446", nombre: "FILOSOFÍA DEL LENGUAJE", caracter: "Troncal", creditos: 11 } ]
+            },
+            { // Similar a Lengua I, "Lengua III + 1 Optativa" se mapea a una Lengua II representativa del Plan 2000.
+                plan93: { codigo: "NO_CODE_P93_5", nombre: "Lengua III + 1 Optativa" },
+                plan2000: [ { codigoOriginalUCM: "104447", nombre: "ALEMÁN PARA FILÓSOFOS II", caracter: "Obligatoria", creditos: 9 } ] // Representativo de Lengua II P2000
+            },
+            {
+                plan93: { codigo: "NO_CODE_P93_6", nombre: "Filosofía de la Naturaleza + 1 Optativa" },
+                plan2000: [ { codigoOriginalUCM: "104450", nombre: "FILOSOFÍA DE LA NATURALEZA", caracter: "Obligatoria", creditos: 9 } ]
+            },
+            {
+                plan93: { codigo: "NO_CODE_P93_7", nombre: "Teoría De la Racionalidad Práctica" },
+                plan2000: [ { codigoOriginalUCM: "104451", nombre: "TEORÍA DE LA RACIONALIDAD PRÁCTICA", caracter: "Obligatoria", creditos: 4.5 } ]
+            },
+            {
+                plan93: { codigo: "NO_CODE_P93_8", nombre: "Introducción a la Psicología" },
+                plan2000: [ { codigoOriginalUCM: "104452", nombre: "INTRODUCCIÓN A LA PSICOLOGÍA", caracter: "Obligatoria", creditos: 4.5 } ]
+            },
+            {
+                plan93: { codigo: "NO_CODE_P93_9", nombre: "Historia de la De la Filosofía Moderna + 1 Optativa" }, // "de la De la" es como está en la tabla
+                plan2000: [ { codigoOriginalUCM: "104453", nombre: "HISTORIA DE LA FILOSOFÍA MODERNA", caracter: "Troncal", creditos: 11 } ]
+            },
+            {
+                plan93: { codigo: "031", nombre: "Teoría Del Conocimiento I y Teoría Del Conocimiento II" },
+                plan2000: [ { codigoOriginalUCM: "104455", nombre: "TEORÍA DEL CONOCIMIENTO", caracter: "Troncal", creditos: 11 } ]
+            },
+            {
+                plan93: { codigo: "029", nombre: "Ética I y Ética II" },
+                plan2000: [ { codigoOriginalUCM: "104454", nombre: "ÉTICA", caracter: "Troncal", creditos: 11 } ]
+            },
+            {
+                plan93: { codigo: "NO_CODE_P93_10", nombre: "Filosofía de la Religión" },
+                plan2000: [ { codigoOriginalUCM: "104457", nombre: "FILOSOFÍA DE LA RELIGIÓN", caracter: "Obligatoria", creditos: 4.5 } ]
+            },
+            {
+                plan93: { codigo: "NO_CODE_P93_11", nombre: "Historia de la y Filosofía de la Lógica" }, // "de la y" es como está en la tabla
+                plan2000: [ { codigoOriginalUCM: "104456", nombre: "HISTORIA Y FILOSOFÍA DE LA LÓGICA", caracter: "Obligatoria", creditos: 6 } ]
+            },
+            {
+                plan93: { codigo: "040", nombre: "Metafísica I y Metafísica II" },
+                plan2000: [ { codigoOriginalUCM: "104479", nombre: "METAFÍSICA", caracter: "Troncal", creditos: 11 } ]
+            },
+            {
+                plan93: { codigo: "036", nombre: "Estética I y Estética II" },
+                plan2000: [ { codigoOriginalUCM: "104480", nombre: "ESTÉTICA", caracter: "Troncal", creditos: 11 } ]
+            },
+            {
+                plan93: { codigo: "027", nombre: "Filosofía del Siglo XIX y Filosofía del Siglo XX" },
+                plan2000: [ { codigoOriginalUCM: "104481", nombre: "FILOSOFÍA CONTEMPORÁNEA", caracter: "Obligatoria", creditos: 11 } ]
+            },
+            {
+                plan93: { codigo: "NO_CODE_P93_12", nombre: "Teoría de la Sociedad" },
+                plan2000: [ { codigoOriginalUCM: "104484", nombre: "TEORÍA DE LA SOCIEDAD", caracter: "Obligatoria", creditos: 4.5 } ]
+            },
+            {
+                plan93: { codigo: "NO_CODE_P93_13", nombre: "Escuelas y Sistemas de Psicología" },
+                plan2000: [ { codigoOriginalUCM: "104485", nombre: "ESCUELAS Y SISTEMAS DE PSICOLOGÍA", caracter: "Obligatoria", creditos: 4.5 } ]
+            },
+            {
+                plan93: { codigo: "NO_CODE_P93_14", nombre: "Historia de la Filosofía Española" },
+                plan2000: [ { codigoOriginalUCM: "104482", nombre: "HISTORIA DE LA FILOSOFÍA ESPAÑOLA", caracter: "Obligatoria", creditos: 4.5 } ]
+            },
+            {
+                plan93: { codigo: "NO_CODE_P93_15", nombre: "Historia de la y Filosofía de la Ciencia" },
+                plan2000: [ { codigoOriginalUCM: "104483", nombre: "HISTORIA Y TEORÍA DE LA CIENCIA", caracter: "Obligatoria", creditos: 4.5 } ]
+            },
+            {
+                plan93: { codigo: "038", nombre: "Filosofía de la Ciencia I y Filosofía de la Ciencia II" },
+                plan2000: [ { codigoOriginalUCM: "104486", nombre: "FILOSOFÍA DE LA CIENCIA", caracter: "Troncal", creditos: 11 } ]
+            },
+            {
+                plan93: { codigo: "044", nombre: "Filosofía Política I y Filosofía Política II" },
+                plan2000: [ { codigoOriginalUCM: "104487", nombre: "FILOSOFÍA POLÍTICA", caracter: "Troncal", creditos: 11 } ]
+            },
+            {
+                plan93: { codigo: "NO_CODE_P93_16", nombre: "Corrientes actuales de la Filosofía: Cuestiones Fundamentales" },
+                plan2000: [ { codigoOriginalUCM: "104488", nombre: "CORRIENTES ACTUALES DE LA FILOSOFÍA: CUESTIONES FUNDAMENTALES", caracter: "Troncal", creditos: 6 } ]
+            },
+            {
+                plan93: { codigo: "NO_CODE_P93_17", nombre: "Corrientes actuales de la Filosofía: Grandes Paradigmas" },
+                plan2000: [ { codigoOriginalUCM: "104489", nombre: "CORRIENTES ACTUALES DE LA FILOSOFÍA: GRANDES PARADIGMAS", caracter: "Troncal", creditos: 6 } ]
+            },
+            {
+                plan93: { codigo: "NO_CODE_P93_18", nombre: "Filosofía de la Acción" },
+                plan2000: [ { codigoOriginalUCM: "104490", nombre: "FILOSOFÍA DE LA ACCIÓN", caracter: "Obligatoria", creditos: 4.5 } ]
+            },
+            {
+                plan93: { codigo: "NO_CODE_P93_19", nombre: "Filosofía de la Historia" },
+                plan2000: [ { codigoOriginalUCM: "104491", nombre: "FILOSOFÍA DE LA HISTORIA", caracter: "Obligatoria", creditos: 4.5 } ]
+            }
+        ];
+        
+        // --- Referencia a datos del Plan 2000 del simulador anterior (para completar detalles) ---
+        // Esto es una simplificación. En una app real, estos datos vendrían de una fuente única.
+        // Aquí se asume que los datos del Plan 2000 en adaptationDataPlan93to2000 ya están completos
+        // gracias al cruce manual al crear el array.
+
+        // --- VARIABLES DE ESTADO Y ELEMENTOS DOM ---
+        let filteredPlan93Subjects = [];
+        let selectedPlan93Codes = []; 
+        const TOTAL_CREDITOS_PLAN2000 = 311.5;
+
+        const searchInput = document.getElementById('search-input');
+        const subjectListEl = document.getElementById('subject-list');
+        const resultsSectionEl = document.getElementById('results-section');
+        const equivalencesContainerEl = document.getElementById('equivalences-container');
+        const noSelectedSubjectsEl = document.getElementById('no-selected-subjects');
+        const summaryTextEl = document.getElementById('summary-text');
+        const noResultsEl = document.getElementById('no-results');
+        const clearSelectedButton = document.getElementById('clear-selected-button');
+        const printSummaryButton = document.getElementById('print-summary-button');
+
+        // --- FUNCIONES AUXILIARES ---
+        function normalizeText(text) {
+            if (!text) return "";
+            return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        }
+
+        // --- LÓGICA DE RENDERIZADO ---
+        function renderPlan93SubjectList() { // Cambiado el nombre de la función
+            if (!subjectListEl) return;
+            const searchTerm = searchInput.value.trim();
+
+            if (filteredPlan93Subjects.length === 0 && searchTerm !== "") {
+                subjectListEl.style.display = 'none';
+                noResultsEl.style.display = 'block';
+                return;
+            }
+
+            noResultsEl.style.display = 'none';
+            subjectListEl.style.display = 'block';
+            subjectListEl.innerHTML = filteredPlan93Subjects.map(item => {
+                const isSelected = selectedPlan93Codes.includes(item.plan93.codigo);
+                let codeDisplay = item.plan93.codigo.startsWith("NO_CODE_P93_") ? "" : `<span class="subject-code">Cód: ${item.plan93.codigo}</span>`;
+                return `
+                <div class="subject-item ${isSelected ? 'selected-for-adaptation' : ''}" 
+                     onclick="togglePlan93Selection('${item.plan93.codigo}')"
+                     data-codigo="${item.plan93.codigo}">
+                    <span class="subject-name">${item.plan93.nombre}</span>
+                    <span class="subject-details-plan93">
+                        (${codeDisplay} Plan 93)
+                    </span>
+                </div>
+            `}).join('');
+        }
+
+        function renderResults() {
+            if (!equivalencesContainerEl || !summaryTextEl || !resultsSectionEl || !noSelectedSubjectsEl) return;
+
+            if (selectedPlan93Codes.length === 0) {
+                resultsSectionEl.style.display = 'none';
+                return;
+            }
+            
+            resultsSectionEl.style.display = 'block';
+            equivalencesContainerEl.innerHTML = '';
+            let allPlan2000EquivalentsForSummary = [];
+            let totalCreditosPlan2000Reconocidos = 0;
+
+            if (selectedPlan93Codes.length > 0) {
+                noSelectedSubjectsEl.style.display = 'none';
+                selectedPlan93Codes.forEach(codigoP93 => {
+                    const subjectData = adaptationDataPlan93to2000.find(item => item.plan93.codigo === codigoP93);
+                    if (subjectData) {
+                        const block = document.createElement('div');
+                        block.className = 'plan93-block'; // Clase renombrada
+                        block.innerHTML = `<h3>${subjectData.plan93.nombre}</h3>
+                                           <p class="p93-details">(Plan 93) equivale a:</p>`;
+                        
+                        subjectData.plan2000.forEach((p2000Item) => { // Asumiendo que siempre hay al menos uno
+                            block.innerHTML += `
+                                <div class="equivalence-card">
+                                    <div class="equivalence-content">
+                                        <h4>${p2000Item.nombre || 'Nombre no disponible'}</h4>
+                                        <p class="plan2000-details">(Plan 2000: ${p2000Item.caracter}, ${p2000Item.creditos} créd.)</p>
+                                    </div>
+                                </div>`;
+                            if (!allPlan2000EquivalentsForSummary.find(p => p.codigoOriginalUCM === p2000Item.codigoOriginalUCM)) {
+                                allPlan2000EquivalentsForSummary.push(p2000Item);
+                                totalCreditosPlan2000Reconocidos += p2000Item.creditos;
+                            }
+                        });
+                        equivalencesContainerEl.appendChild(block);
+                    }
+                });
+            } else {
+                noSelectedSubjectsEl.style.display = 'block';
+            }
+
+            if (allPlan2000EquivalentsForSummary.length > 0) {
+                let summary = `<p>Con las asignaturas del Plan 93 seleccionadas, se te reconocerían las siguientes asignaturas de la Licenciatura (Plan 2000):</p><ul>`;
+                allPlan2000EquivalentsForSummary.sort((a,b) => a.nombre.localeCompare(b.nombre)).forEach(p => {
+                    summary += `<li><strong>${p.nombre}</strong> (${p.caracter}, ${p.creditos} créd.)</li>`;
+                });
+                summary += `</ul>`;
+                summary += `<div class="summary-credits">
+                                <p>Total créditos del Plan 2000 reconocidos: <strong>${totalCreditosPlan2000Reconocidos.toFixed(1)}</strong></p>
+                                <p>Créditos del Plan 2000 restantes por cursar: <strong>${(TOTAL_CREDITOS_PLAN2000 - totalCreditosPlan2000Reconocidos).toFixed(1)}</strong> (de ${TOTAL_CREDITOS_PLAN2000} totales)</p>
+                            </div>`;
+                summaryTextEl.innerHTML = summary;
+            } else {
+                summaryTextEl.innerHTML = `<p>Aún no has seleccionado asignaturas del Plan 93 o las seleccionadas no tienen equivalencias definidas.</p>`;
+            }
+        }
+
+        // --- MANEJADORES DE EVENTOS Y LÓGICA DE INTERACCIÓN ---
+        function filterPlan93Subjects(searchTerm) { // Cambiado nombre
+            const normalizedSearchTerm = normalizeText(searchTerm);
+            if (!normalizedSearchTerm.trim()) {
+                filteredPlan93Subjects = [...adaptationDataPlan93to2000];
+            } else {
+                filteredPlan93Subjects = adaptationDataPlan93to2000.filter(item =>
+                    normalizeText(item.plan93.nombre).includes(normalizedSearchTerm) ||
+                    (item.plan93.codigo && !item.plan93.codigo.startsWith("NO_CODE_P93_") && item.plan93.codigo.toLowerCase().includes(normalizedSearchTerm))
+                );
+            }
+            renderPlan93SubjectList();
+        }
+
+        function togglePlan93Selection(codigoP93) { // Cambiado nombre
+            const index = selectedPlan93Codes.indexOf(codigoP93);
+            if (index > -1) {
+                selectedPlan93Codes.splice(index, 1);
+            } else {
+                selectedPlan93Codes.push(codigoP93);
+            }
+            
+            const listItem = subjectListEl.querySelector(`.subject-item[data-codigo="${codigoP93}"]`);
+            if(listItem) {
+                listItem.classList.toggle('selected-for-adaptation');
+            }
+            renderResults();
+        }
+        
+        function clearAllSelections() {
+            selectedPlan93Codes = [];
+            searchInput.value = '';
+            filterPlan93Subjects('');
+            renderResults();
+        }
+
+        function printSummary() {
+            window.print();
+        }
+
+        // --- INICIALIZACIÓN ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => filterPlan93Subjects(e.target.value));
+            }
+            if (clearSelectedButton) {
+                clearSelectedButton.addEventListener('click', clearAllSelections);
+            }
+            if (printSummaryButton) {
+                printSummaryButton.addEventListener('click', printSummary);
+            }
+            
+            filteredPlan93Subjects = [...adaptationDataPlan93to2000];
+            renderPlan93SubjectList();
+            renderResults(); 
+        });
+    </script>
+</body>
+</html>
