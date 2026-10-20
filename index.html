@@ -3,30 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Simulador Licenciatura a Grado en Filosofía</title>
+<title>Simulador Plan 93 a Plan 2000</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>[hidden]{display:none!important} img{max-width:100%}</style>
 <style>
-/* Layout: two-pane worksheet — asignaturas de Licenciatura superadas a la izquierda, plan del Grado con lo reconocido a la derecha (fijo al hacer scroll); en móvil se apilan y una barra inferior resume. */
+/* Layout: two-pane worksheet — asignaturas del Plan 93 superadas a la izquierda, Plan 2000 con lo reconocido a la derecha (fijo al hacer scroll); en móvil se apilan y una barra inferior resume. */
 :root{
   --bg:#f6f7f9; --surface:#ffffff; --line:#dfe3ea; --ink:#1b2230; --muted:#5d6779;
   --fil:#2f5f8a; --fil-soft:#e6eef6; --der:#8a3a3f; --der-soft:#f5e8e8;
   --ok:#2e6b48; --ok-soft:#e5f1e9; --warn:#8a5a12; --warn-soft:#f8eedb;
-  --accent:#1f3a5c;
+  --accent:#1f3a5c; color-scheme:light;
   --f-display:"Source Serif 4", Georgia, "Times New Roman", serif;
   --f-body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#12161d; --surface:#1a2029; --line:#2c3441; --ink:#e4e8ef; --muted:#9aa4b4;
-  --fil:#8db8e0; --fil-soft:#1d2c3c; --der:#e09a9f; --der-soft:#3a2224;
-  --ok:#7fc79b; --ok-soft:#1c3226; --warn:#e2b56a; --warn-soft:#382c17; --accent:#a9c4e6; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#12161d; --surface:#1a2029; --line:#2c3441; --ink:#e4e8ef; --muted:#9aa4b4;
-  --fil:#8db8e0; --fil-soft:#1d2c3c; --der:#e09a9f; --der-soft:#3a2224;
-  --ok:#7fc79b; --ok-soft:#1c3226; --warn:#e2b56a; --warn-soft:#382c17; --accent:#a9c4e6; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;margin:0}
 .wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 96px}
@@ -107,23 +99,22 @@ textarea.fallback{width:100%;min-height:160px;font-family:var(--f-mono);font-siz
 </head>
 <body>
 <style>
-.lcred{font-family:var(--f-mono);font-size:11px;padding:1px 6px;border-radius:4px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.lcred{font-family:var(--f-mono);font-size:11px;padding:1px 6px;border-radius:4px;border:1px solid var(--line);color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
 .maps{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
-.rrow.exc .st{color:var(--warn)}
-.legend-note{font-size:12.5px;color:var(--muted);margin:-6px 0 12px}
+.chip.k-TR{color:var(--accent)}
 </style>
 
 <div class="wrap">
   <header>
     <span class="eyebrow">Facultad de Filosofía · Secretaría de Estudiantes</span>
-    <h1>Simulador de adaptación de la Licenciatura (Plan 2000) al Grado en Filosofía</h1>
-    <p class="lede">Marca las asignaturas de la Licenciatura que tienes superadas. A la derecha verás qué asignaturas del Grado en Filosofía se te reconocerían y cuáles te quedarían por cursar. El resultado es orientativo.</p>
+    <h1>Simulador de adaptación de la Licenciatura en Filosofía: del Plan 93 al Plan 2000</h1>
+    <p class="lede">Marca las asignaturas del Plan 93 que tienes superadas. A la derecha verás qué asignaturas troncales y obligatorias del Plan 2000 se te reconocerían y cuáles te quedarían por cursar. El resultado es orientativo.</p>
   </header>
 
   <div class="grid">
     <section class="pane" aria-labelledby="h-orig">
-      <h2 id="h-orig">Asignaturas superadas en la Licenciatura</h2>
-      <p class="sub">Licenciatura en Filosofía, Plan 2000. Los créditos son los del plan antiguo, no ECTS.</p>
+      <h2 id="h-orig">Asignaturas superadas en el Plan 93</h2>
+      <p class="sub">Agrupadas según el curso del Plan 2000 al que equivalen. Algunas exigen haber superado también una optativa.</p>
       <div class="tools">
         <input class="search" id="q" type="search" placeholder="Buscar por nombre o código" aria-label="Buscar asignatura">
         <button class="btn" id="clear" type="button">Desmarcar todo</button>
@@ -136,56 +127,48 @@ textarea.fallback{width:100%;min-height:160px;font-family:var(--f-mono);font-siz
   </div>
 
   <footer>
-    Fuente: tabla de adaptación de la Licenciatura en Filosofía (Plan 2000) al Grado en Filosofía (0820) usada por el simulador de la Facultad; carácter y semestre de las asignaturas del Grado según la tabla de equivalencias de 2026 y el plan de estudios del Grado (enero de 2026). La resolución de la adaptación corresponde a la Facultad y puede tener en cuenta circunstancias del expediente que esta simulación no recoge.
+    Fuente: tabla de adaptación de la Licenciatura en Filosofía del Plan 93 al Plan 2000 usada por el simulador de la Facultad. Créditos del plan antiguo, no ECTS. La resolución de la adaptación corresponde a la Facultad y puede tener en cuenta circunstancias del expediente que esta simulación no recoge.
   </footer>
 </div>
 
-<div class="mbar" id="mbar"><span><b id="mb-n">0</b> ECTS reconocidos</span><button class="btn primary" type="button" id="mb-go">Ver resultado</button></div>
+<div class="mbar" id="mbar"><span><b id="mb-n">0</b> créditos reconocidos</span><button class="btn primary" type="button" id="mb-go">Ver resultado</button></div>
 
 <script>
-const DATA = {"lic":[{"id":"L200","cod":"200","nom":"ANTROPOLOGÍA","cred":11.0,"tipo":"Troncal","orig":"TR. 1º","g":["801292","801297"],"curso":1},{"id":"L201","cod":"201","nom":"HISTORIA DE LA FILOSOFÍA ANTIGUA","cred":11.0,"tipo":"Troncal","orig":"TR. 1º","g":["801298","801319"],"curso":1},{"id":"L202","cod":"202","nom":"LÓGICA","cred":11.0,"tipo":"Troncal","orig":"TR. 1º","g":["801304","801309"],"curso":1},{"id":"L203","cod":"203","nom":"ONTOLOGÍA FUNDAMENTAL","cred":11.0,"tipo":"Obligatoria","orig":"OB. 1º","g":["801293","801313"],"curso":1},{"id":"L204","cod":"204","nom":"ALEMÁN PARA FILÓSOFOS I","cred":9.0,"tipo":"Obligatoria","orig":"OB. 1º","g":["801305","801294"],"curso":1},{"id":"L205","cod":"205","nom":"LATÍN I","cred":9.0,"tipo":"Obligatoria","orig":"OB. 1º","g":["801305","801300"],"curso":1},{"id":"L206","cod":"206","nom":"GRIEGO I","cred":9.0,"tipo":"Obligatoria","orig":"OB. 1º","g":["801305","801290"],"curso":1},{"id":"L207","cod":"207","nom":"HISTORIA DE LA FILOSOFÍA MEDIEVAL","cred":11.0,"tipo":"Troncal","orig":"TR. 1º","g":["801299","801320"],"curso":2},{"id":"L208","cod":"208","nom":"FILOSOFÍA DEL LENGUAJE","cred":11.0,"tipo":"Troncal","orig":"TR. 2º","g":["801334","801343"],"curso":2},{"id":"L209","cod":"209","nom":"ALEMÁN PARA FILÓSOFOS II","cred":9.0,"tipo":"Obligatoria","orig":"OB. 2º","g":["801337"],"curso":2},{"id":"L210","cod":"210","nom":"LATÍN II","cred":9.0,"tipo":"Obligatoria","orig":"OB. 2º","g":["801338"],"curso":2},{"id":"L211","cod":"211","nom":"GRIEGO II","cred":9.0,"tipo":"Obligatoria","orig":"OB. 2º","g":["801339"],"curso":2},{"id":"L212","cod":"212","nom":"FILOSOFÍA DE LA NATURALEZA","cred":9.0,"tipo":"Obligatoria","orig":"OB. 2º","g":["801303"],"curso":2},{"id":"L213","cod":"213","nom":"TEORÍA DE LA RACIONALIDAD PRÁCTICA","cred":4.5,"tipo":"Obligatoria","orig":"OB. 2º","g":["801325"],"curso":2},{"id":"L214","cod":"214","nom":"INTRODUCCIÓN A LA PSICOLOGÍA","cred":4.5,"tipo":"Obligatoria","orig":"OB. 2º","g":["801295"],"curso":2},{"id":"L215","cod":"215","nom":"HISTORIA DE LA FILOSOFÍA MODERNA","cred":11.0,"tipo":"Troncal","orig":"TR. 3º","g":["801307","801321"],"curso":3},{"id":"L216","cod":"216","nom":"ÉTICA","cred":11.0,"tipo":"Troncal","orig":"TR. 3º","g":["801301","801308"],"curso":3},{"id":"L217","cod":"217","nom":"TEORÍA DEL CONOCIMIENTO","cred":11.0,"tipo":"Troncal","orig":"TR. 3º","g":["801302","801306"],"curso":3},{"id":"L218","cod":"218","nom":"HISTORIA Y FILOSOFÍA DE LA LÓGICA","cred":6.0,"tipo":"Obligatoria","orig":"OB. 3º","g":["801333"],"curso":3},{"id":"L219","cod":"219","nom":"FILOSOFÍA DE LA RELIGIÓN","cred":4.5,"tipo":"Obligatoria","orig":"OB. 3º","g":["801315"],"curso":3},{"id":"L241","cod":"241","nom":"METAFÍSICA","cred":11.0,"tipo":"Troncal","orig":"TR. 4º","g":["801312","801340"],"curso":4},{"id":"L242","cod":"242","nom":"ESTÉTICA","cred":11.0,"tipo":"Troncal","orig":"TR. 4º","g":["801296","801329"],"curso":4},{"id":"L243","cod":"243","nom":"FILOSOFÍA CONTEMPORÁNEA","cred":11.0,"tipo":"Obligatoria","orig":"OB. 4º","g":["801323","801322"],"curso":4},{"id":"L244","cod":"244","nom":"HISTORIA DE LA FILOSOFÍA ESPAÑOLA","cred":4.5,"tipo":"Obligatoria","orig":"OB. 4º","g":["801341"],"curso":4},{"id":"L245","cod":"245","nom":"HISTORIA Y TEORÍA DE LA CIENCIA","cred":4.5,"tipo":"Obligatoria","orig":"OB. 4º","g":["801336"],"curso":4},{"id":"L246","cod":"246","nom":"TEORÍA DE LA SOCIEDAD","cred":4.5,"tipo":"Obligatoria","orig":"OB. 4º","g":["801328"],"curso":4},{"id":"L247","cod":"247","nom":"ESCUELAS Y SISTEMAS DE PSICOLOGÍA","cred":4.5,"tipo":"Obligatoria","orig":"OB. 4º","g":["801344"],"curso":4},{"id":"L248","cod":"248","nom":"FILOSOFÍA DE LA CIENCIA","cred":11.0,"tipo":"Troncal","orig":"TR. 5º","g":["801346","801348"],"curso":5},{"id":"L249","cod":"249","nom":"FILOSOFÍA POLÍTICA","cred":11.0,"tipo":"Troncal","orig":"TR. 5º","g":["801291","801342"],"curso":5},{"id":"L250","cod":"250","nom":"CORRIENTES ACTUALES DE LA FILOSOFÍA: CUESTIONES FUNDAMENTALES","cred":6.0,"tipo":"Troncal","orig":"TR. 5º","g":["801345"],"curso":5},{"id":"L251","cod":"251","nom":"CORRIENTES ACTUALES DE LA FILOSOFÍA: GRANDES PARADIGMAS","cred":6.0,"tipo":"Troncal","orig":"TR. 5º","g":["801347"],"curso":5},{"id":"L252","cod":"252","nom":"FILOSOFÍA DE LA ACCIÓN","cred":4.5,"tipo":"Obligatoria","orig":"TR. 5º","g":["801310"],"curso":5},{"id":"L253","cod":"253","nom":"FILOSOFÍA DE LA HISTORIA","cred":4.5,"tipo":"Obligatoria","orig":"OB. 5º","g":["801318"],"curso":5},{"id":"L104498","cod":"104498","nom":"TEORÍAS DE LA LIBERTAD","cred":4.5,"tipo":"Optativa","orig":"2º","g":["801314"],"curso":0},{"id":"LU07","cod":"U 07","nom":"CIENCIA, TECNOLOGÍA Y SOCIEDAD","cred":4.5,"tipo":"Optativa","orig":"GENÉRICA","g":["801327"],"curso":0},{"id":"L104469F","cod":"104469F","nom":"TEORÍA Y CRÍTICA FEMINISTA","cred":4.5,"tipo":"Optativa","orig":"1º","g":["801332"],"curso":0}],"cat":[{"cod":"801290","nom":"Historia del Mundo Contemporáneo","ects":6,"sem":"1-1","car":"FB","misma":false},{"cod":"801291","nom":"Filosofía Política I","ects":6,"sem":"1-1","car":"FB","misma":true},{"cod":"801292","nom":"Antropología Filosófica I","ects":6,"sem":"1-1","car":"FB","misma":true},{"cod":"801293","nom":"Ontología Fundamental","ects":6,"sem":"1-1","car":"FB","misma":true},{"cod":"801294","nom":"Literatura Contemporánea","ects":6,"sem":"1-2","car":"FB","misma":false},{"cod":"801295","nom":"Psicología Básica","ects":6,"sem":"1-2","car":"FB","misma":false},{"cod":"801296","nom":"Estética","ects":6,"sem":"1-2","car":"FB","misma":true},{"cod":"801297","nom":"Antropología Filosófica II","ects":6,"sem":"1-2","car":"OB","misma":true},{"cod":"801298","nom":"Historia de la Filosofía Antigua","ects":6,"sem":"1-1","car":"OB","misma":true},{"cod":"801299","nom":"Historia de la Filosofía Medieval","ects":6,"sem":"1-2","car":"OB","misma":true},{"cod":"801300","nom":"Historia del Arte Contemporáneo","ects":6,"sem":"2-2","car":"FB","misma":false},{"cod":"801301","nom":"Ética I","ects":6,"sem":"2-1","car":"FB","misma":true},{"cod":"801302","nom":"Teoría del Conocimiento I","ects":6,"sem":"2-1","car":"OB","misma":true},{"cod":"801303","nom":"Filosofía de la Naturaleza","ects":6,"sem":"2-2","car":"OB","misma":true},{"cod":"801304","nom":"Lógica I","ects":6,"sem":"2-1","car":"OB","misma":true},{"cod":"801305","nom":"Alemán Básico para filósofos","ects":6,"sem":"2-1","car":"FB","misma":false},{"cod":"801306","nom":"Teoría del Conocimiento II","ects":6,"sem":"2-2","car":"OB","misma":true},{"cod":"801307","nom":"Historia de la Filosofía Moderna","ects":6,"sem":"2-1","car":"OB","misma":true},{"cod":"801308","nom":"Ética II","ects":6,"sem":"2-2","car":"OB","misma":true},{"cod":"801309","nom":"Lógica II","ects":6,"sem":"2-2","car":"OB","misma":true},{"cod":"801310","nom":"Filosofía de la Acción","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801311","nom":"Filosofía de la Cultura","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801312","nom":"Metafísica I","ects":6,"sem":"3-1","car":"OB","misma":true},{"cod":"801313","nom":"Hermenéutica y Lenguaje","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801314","nom":"Teoría de la Libertad","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801315","nom":"Filosofía de la Religión","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801317","nom":"Teorías de la Materia y de la Vida","ects":6,"sem":"3/4-1/2","car":"OP","misma":false},{"cod":"801318","nom":"Filosofía de la Historia","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801319","nom":"Seminario de Historia de la Filosofía A","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801320","nom":"Seminario de Filosofía Medieval: El Pe","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801321","nom":"Seminario de Filosofía Moderna","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801322","nom":"Filosofía del Siglo XIX","ects":6,"sem":"3-1","car":"OB","misma":true},{"cod":"801323","nom":"Seminario de Filosofía Contemporánea","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801324","nom":"Seminario de Filosofía Latinoamerican","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801325","nom":"Teoría de la Racionalidad Práctica","ects":6,"sem":"3/4-1/2","car":"OP"},{"cod":"801326","nom":"Bioética","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801327","nom":"Ciencia, Tecnología y Sociedad","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801328","nom":"Teoría de la Sociedad: Historia de las","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801329","nom":"Perspectivas de la Estética Contemporánea","ects":6,"sem":"3-1","car":"OB","misma":true},{"cod":"801330","nom":"Estética y Semiótica","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801331","nom":"Teoría de los Derechos Humanos","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801332","nom":"Teoría y Crítica Feministas","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801333","nom":"Filosofía de la Lógica","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801334","nom":"Filosofía del Lenguaje I","ects":6,"sem":"3-1","car":"OB","misma":true},{"cod":"801335","nom":"Lenguaje y Pensamiento","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801336","nom":"Historia de la Ciencia","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801337","nom":"Alemán Avanzado para Filósofos","ects":6,"sem":"3/4-1/2","car":"OP","misma":false},{"cod":"801338","nom":"Latín para Filósofos","ects":6,"sem":"3/4-1/2","car":"OP","misma":false},{"cod":"801339","nom":"Griego para Filósofos","ects":6,"sem":"3/4-1/2","car":"OP","misma":false},{"cod":"801340","nom":"Metafísica II","ects":6,"sem":"3-2","car":"OB","misma":true},{"cod":"801341","nom":"Filosofía Española Contemporánea","ects":6,"sem":"3-2","car":"OB","misma":true},{"cod":"801342","nom":"Filosofía Política II","ects":6,"sem":"3-2","car":"OB","misma":true},{"cod":"801343","nom":"Filosofía del Lenguaje II","ects":6,"sem":"3-2","car":"OB","misma":true},{"cod":"801344","nom":"Filosofía de la Mente","ects":6,"sem":"4-1","car":"OB","misma":true},{"cod":"801345","nom":"Corrientes Actuales de la Filosofía I","ects":6,"sem":"4-1","car":"OB","misma":true},{"cod":"801346","nom":"Filosofía de la Ciencia I","ects":6,"sem":"4-1","car":"OB","misma":true},{"cod":"801347","nom":"Corrientes Actuales de la Filosofía II","ects":6,"sem":"4-2","car":"OB","misma":true},{"cod":"801348","nom":"Filosofía de la Ciencia II","ects":6,"sem":"4-2","car":"OB","misma":true},{"cod":"801349","nom":"Trabajo Fin de Grado (Filosofía)","ects":6,"sem":"4-2","car":"TFG","misma":true},{"cod":"801350","nom":"Filosofías de Asia","ects":6,"sem":"3/4-1/2","car":"OP","misma":true},{"cod":"801351","nom":"Griego para Filósofos II","ects":6,"sem":"3/4-1/2","car":"OP","misma":false}]};
+const DATA = {"src":[{"id":"p01","cod":"","nom":"Historia de la Filosofía Antigua + 1 optativa","to":["104439"],"curso":1},{"id":"p02","cod":"002","nom":"Antropología I y Antropología II","to":["104438"],"curso":1},{"id":"p03","cod":"005","nom":"Lógica I y Lógica II","to":["104440"],"curso":1},{"id":"p04","cod":"","nom":"Ontología + 1 optativa","to":["104441"],"curso":1},{"id":"p05","cod":"","nom":"Lengua I y Lengua II","to":["104442"],"curso":1},{"id":"p06","cod":"","nom":"Historia de la Filosofía Medieval + 1 optativa","to":["104445"],"curso":2},{"id":"p07","cod":"018","nom":"Filosofía del Lenguaje I y Filosofía del Lenguaje II","to":["104446"],"curso":2},{"id":"p08","cod":"","nom":"Lengua III + 1 optativa","to":["104447"],"curso":2},{"id":"p09","cod":"","nom":"Filosofía de la Naturaleza + 1 optativa","to":["104450"],"curso":2},{"id":"p10","cod":"","nom":"Teoría de la Racionalidad Práctica","to":["104451"],"curso":2},{"id":"p11","cod":"","nom":"Introducción a la Psicología","to":["104452"],"curso":2},{"id":"p12","cod":"","nom":"Historia de la Filosofía Moderna + 1 optativa","to":["104453"],"curso":3},{"id":"p13","cod":"031","nom":"Teoría del Conocimiento I y Teoría del Conocimiento II","to":["104455"],"curso":3},{"id":"p14","cod":"029","nom":"Ética I y Ética II","to":["104454"],"curso":3},{"id":"p15","cod":"","nom":"Filosofía de la Religión","to":["104457"],"curso":3},{"id":"p16","cod":"","nom":"Historia y Filosofía de la Lógica","to":["104456"],"curso":3},{"id":"p17","cod":"040","nom":"Metafísica I y Metafísica II","to":["104479"],"curso":4},{"id":"p18","cod":"036","nom":"Estética I y Estética II","to":["104480"],"curso":4},{"id":"p19","cod":"027","nom":"Filosofía del Siglo XIX y Filosofía del Siglo XX","to":["104481"],"curso":4},{"id":"p20","cod":"","nom":"Teoría de la Sociedad","to":["104484"],"curso":4},{"id":"p21","cod":"","nom":"Escuelas y Sistemas de Psicología","to":["104485"],"curso":4},{"id":"p22","cod":"","nom":"Historia de la Filosofía Española","to":["104482"],"curso":4},{"id":"p23","cod":"","nom":"Historia y Filosofía de la Ciencia","to":["104483"],"curso":4},{"id":"p24","cod":"038","nom":"Filosofía de la Ciencia I y Filosofía de la Ciencia II","to":["104486"],"curso":5},{"id":"p25","cod":"044","nom":"Filosofía Política I y Filosofía Política II","to":["104487"],"curso":5},{"id":"p26","cod":"","nom":"Corrientes Actuales de la Filosofía: Cuestiones Fundamentales","to":["104488"],"curso":5},{"id":"p27","cod":"","nom":"Corrientes Actuales de la Filosofía: Grandes Paradigmas","to":["104489"],"curso":5},{"id":"p28","cod":"","nom":"Filosofía de la Acción","to":["104490"],"curso":5},{"id":"p29","cod":"","nom":"Filosofía de la Historia","to":["104491"],"curso":5}],"tgt":[{"cod":"104438","nom":"Antropología","cred":11,"car":"TR","curso":1},{"cod":"104439","nom":"Historia de la Filosofía Antigua","cred":11,"car":"TR","curso":1},{"cod":"104440","nom":"Lógica","cred":11,"car":"TR","curso":1},{"cod":"104441","nom":"Ontología Fundamental","cred":11,"car":"OB","curso":1},{"cod":"104442","nom":"Lengua I (Alemán, Latín o Griego)","cred":9,"car":"OB","curso":1},{"cod":"104445","nom":"Historia de la Filosofía Medieval","cred":11,"car":"TR","curso":2},{"cod":"104446","nom":"Filosofía del Lenguaje","cred":11,"car":"TR","curso":2},{"cod":"104447","nom":"Lengua II (Alemán, Latín o Griego)","cred":9,"car":"OB","curso":2},{"cod":"104450","nom":"Filosofía de la Naturaleza","cred":9,"car":"OB","curso":2},{"cod":"104451","nom":"Teoría de la Racionalidad Práctica","cred":4.5,"car":"OB","curso":2},{"cod":"104452","nom":"Introducción a la Psicología","cred":4.5,"car":"OB","curso":2},{"cod":"104453","nom":"Historia de la Filosofía Moderna","cred":11,"car":"TR","curso":3},{"cod":"104454","nom":"Ética","cred":11,"car":"TR","curso":3},{"cod":"104455","nom":"Teoría del Conocimiento","cred":11,"car":"TR","curso":3},{"cod":"104456","nom":"Historia y Filosofía de la Lógica","cred":6,"car":"OB","curso":3},{"cod":"104457","nom":"Filosofía de la Religión","cred":4.5,"car":"OB","curso":3},{"cod":"104479","nom":"Metafísica","cred":11,"car":"TR","curso":4},{"cod":"104480","nom":"Estética","cred":11,"car":"TR","curso":4},{"cod":"104481","nom":"Filosofía Contemporánea","cred":11,"car":"OB","curso":4},{"cod":"104482","nom":"Historia de la Filosofía Española","cred":4.5,"car":"OB","curso":4},{"cod":"104483","nom":"Historia y Teoría de la Ciencia","cred":4.5,"car":"OB","curso":4},{"cod":"104484","nom":"Teoría de la Sociedad","cred":4.5,"car":"OB","curso":4},{"cod":"104485","nom":"Escuelas y Sistemas de Psicología","cred":4.5,"car":"OB","curso":4},{"cod":"104486","nom":"Filosofía de la Ciencia","cred":11,"car":"TR","curso":5},{"cod":"104487","nom":"Filosofía Política","cred":11,"car":"TR","curso":5},{"cod":"104488","nom":"Corrientes Actuales de la Filosofía: Cuestiones Fundamentales","cred":6,"car":"TR","curso":5},{"cod":"104489","nom":"Corrientes Actuales de la Filosofía: Grandes Paradigmas","cred":6,"car":"TR","curso":5},{"cod":"104490","nom":"Filosofía de la Acción","cred":4.5,"car":"OB","curso":5},{"cod":"104491","nom":"Filosofía de la Historia","cred":4.5,"car":"OB","curso":5}]};
 
-const KIND = {FB:'Formación básica',OB:'Obligatoria',OP:'Optativa',TFG:'Trabajo Fin de Grado'};
-const KCOL = {FB:'var(--accent)',OB:'var(--ok)',OP:'var(--warn)',TFG:'var(--der)'};
-// Grado en Filosofía: FB 60 · OB 138 · OP 36 · TFG 6 = 240
-const REQ = {FB:60,OB:138,OP:36,TFG:6}, TOTAL = 240;
+// Plan 2000: 311,5 créditos; troncales 144 y obligatorias 95,5 (239,5); el resto, 72, optativas y libre elección
+const KIND = {TR:'Troncales',OB:'Obligatorias'};
+const KCOL = {TR:'var(--accent)',OB:'var(--ok)'};
+const REQ = {TR:144, OB:95.5}, CORE = 239.5, TOTAL = 311.5, FREE = TOTAL-CORE;
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fold = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
-const fmt = n => String(n).replace('.',',');
+const fmt = n => (Math.round(n*10)/10).toLocaleString('es-ES');
 function store(k,v){try{ if(v===undefined) return JSON.parse(localStorage.getItem(k)||'null'); localStorage.setItem(k,JSON.stringify(v)) }catch(e){ return null }}
-function semKey(s){ if(/^\d-\d$/.test(s)){const [c,q]=s.split('-').map(Number);return c*10+q} return 999 }
-function semLabel(s){ if(/^\d-\d$/.test(s)){const [c,q]=s.split('-');return `${c}.º curso · ${q==='1'?'1.er':'2.º'} semestre`} return 'Optativas' }
-const cursoLabel = c => c ? `${c}.º curso` : 'Optativas y libre elección';
-const title = s => s.toLowerCase().replace(/(^|[\s(:,-])([a-záéíóúñü])/g,(m,a,b)=>a+b.toUpperCase()).replace(/\b(De|Del|La|Las|Los|Y|E|Para|Al|En|El)\b/g,w=>w.toLowerCase()).replace(/^./,c=>c.toUpperCase()).replace(/\bIi\b/g,'II');
+const cursoLabel = c => `${c}.º curso del Plan 2000`;
 
-const LIC = DATA.lic.map(l=>({...l,nom:title(l.nom)}));
-const CAT = new Map(DATA.cat.map(c=>[c.cod,c]));
-const LIC_BY_ID = new Map(LIC.map(l=>[l.id,l]));
+const TGT = new Map(DATA.tgt.map(t=>[t.cod,t]));
+const SRC = new Map(DATA.src.map(s=>[s.id,s]));
 
-/* ---------- estado ---------- */
-let sel = new Set(store('lic-sel')||[]);   // conserva el orden en que se marcan
-let part = !!store('lic-part');
+let sel = new Set(store('p93-sel')||[]);
 let onlyPending = false;
 
-/* ---------- origen ---------- */
 function renderOrigin(){
   const q = fold($('#q').value.trim());
-  const vis = LIC.filter(l=>!q || fold(l.nom).includes(q) || fold(l.cod).includes(q));
+  const vis = DATA.src.filter(s=>!q || fold(s.nom).includes(q) || (s.cod && s.cod.includes(q)));
   if(!vis.length){ $('#orig').innerHTML='<p class="empty">Ninguna asignatura coincide con la búsqueda.</p>'; return }
   const groups = new Map();
-  vis.slice().sort((a,b)=>(a.curso||9)-(b.curso||9)).forEach(l=>{const g=cursoLabel(l.curso); if(!groups.has(g)) groups.set(g,[]); groups.get(g).push(l)});
+  vis.slice().sort((a,b)=>a.curso-b.curso).forEach(s=>{const g=cursoLabel(s.curso); if(!groups.has(g)) groups.set(g,[]); groups.get(g).push(s)});
   let h='';
   for(const [g,list] of groups){
-    h+=`<div class="group"><div class="ghead"><strong>${esc(g)}</strong><button class="link" type="button" data-all="${esc(g)}">Marcar el curso</button></div>`;
-    for(const l of list){
-      const id=`c-${l.id}`;
-      const maps = l.g.map(c=>CAT.get(c).nom).join(' · ');
+    h+=`<div class="group"><div class="ghead"><strong>Equivalen a ${esc(g)}</strong><button class="link" type="button" data-all="${esc(g)}">Marcar el grupo</button></div>`;
+    for(const s of list){
+      const id=`c-${s.id}`, t=TGT.get(s.to[0]);
       h+=`<label class="item" for="${id}" data-g="${esc(g)}">
-        <input type="checkbox" id="${id}" value="${l.id}" ${sel.has(l.id)?'checked':''}>
-        <span class="iname"><span class="n">${esc(l.nom)}</span><span class="code">Cód. ${esc(l.cod)}</span><span class="maps">→ ${esc(maps)}</span></span>
-        <span class="chips"><span class="chip">${esc(l.tipo)}</span><span class="lcred">${fmt(l.cred)} créd.</span></span>
+        <input type="checkbox" id="${id}" value="${s.id}" ${sel.has(s.id)?'checked':''}>
+        <span class="iname"><span class="n">${esc(s.nom)}</span>${s.cod?`<span class="code">Cód. ${esc(s.cod)}</span>`:''}<span class="maps">→ ${esc(t.nom)}</span></span>
+        <span class="chips"><span class="chip">Plan 93</span></span>
       </label>`;
     }
     h+='</div>';
@@ -193,122 +176,78 @@ function renderOrigin(){
   $('#orig').innerHTML=h;
 }
 
-/* ---------- cálculo ---------- */
 function compute(){
-  const via = new Map();            // código de Grado -> asignaturas de Licenciatura que lo dan
-  const order = [];                 // orden en que se reconocen (para el tope de optativas)
-  for(const id of sel){
-    const l = LIC_BY_ID.get(id); if(!l) continue;
-    for(const c of l.g){
-      if(!via.has(c)){ via.set(c,[]); order.push(c) }
-      via.get(c).push(l);
-    }
-  }
-  // Optativas: computan como máximo 36 ECTS (6 asignaturas); el resto son excedentes
-  const pc = part ? 6 : 0;
-  let opRoom = REQ.OP - pc;
-  const counted = new Set(), excess = [];
-  for(const c of order){
-    const g = CAT.get(c);
-    if(g.car!=='OP'){ counted.add(c); continue }
-    if(opRoom >= g.ects){ counted.add(c); opRoom -= g.ects } else excess.push(c);
-  }
-  const t = {FB:0,OB:0,OP:pc,TFG:0};
-  counted.forEach(c=>{const g=CAT.get(c); t[g.car]+=g.ects});
-  const total = t.FB+t.OB+t.OP+t.TFG;
-  return {via,counted,excess,t,total,pc};
+  const via = new Map();
+  for(const id of sel){ const s=SRC.get(id); if(!s) continue; for(const c of s.to){ if(!via.has(c)) via.set(c,[]); via.get(c).push(s) } }
+  const t={TR:0,OB:0};
+  via.forEach((_,c)=>{const g=TGT.get(c); t[g.car]+=g.cred});
+  return {via,t,total:t.TR+t.OB};
 }
 
-/* ---------- resultado ---------- */
 function renderResult(){
   const r = compute();
-  const left = TOTAL - r.total;
-  const pct = k => Math.min(100, r.t[k]/TOTAL*100);
-  let h = `<h2 id="h-res" style="font-family:var(--f-display);font-size:21px;margin:0 0 2px">Resultado en el Grado en Filosofía</h2>
-  <p class="sub" style="color:var(--muted);font-size:13.5px;margin:0 0 12px">Grado en Filosofía (0820) · 240 ECTS</p>
-  <div class="big"><span class="num">${r.total}</span><span class="of">ECTS reconocidos de ${TOTAL} · faltan ${left}</span></div>
-  <div class="bar" aria-hidden="true">${['FB','OB','OP','TFG'].map(k=>`<span style="width:${pct(k)}%;background:${KCOL[k]}"></span>`).join('')}</div>
-  <div class="legend">${['FB','OB','OP','TFG'].map(k=>`<div><span><span class="dot" style="background:${KCOL[k]};margin-right:6px"></span>${KIND[k]}</span><b>${r.t[k]} / ${REQ[k]}</b></div>`).join('')}</div>`;
+  const pct = k => Math.min(100, r.t[k]/CORE*100);
+  let h = `<h2 id="h-res" style="font-family:var(--f-display);font-size:21px;margin:0 0 2px">Resultado en el Plan 2000</h2>
+  <p class="sub" style="color:var(--muted);font-size:13.5px;margin:0 0 12px">Licenciatura en Filosofía, Plan 2000 · ${fmt(TOTAL)} créditos</p>
+  <div class="big"><span class="num">${fmt(r.total)}</span><span class="of">créditos reconocidos de ${fmt(CORE)} troncales y obligatorios · faltan ${fmt(CORE-r.total)}</span></div>
+  <div class="bar" aria-hidden="true">${['TR','OB'].map(k=>`<span style="width:${pct(k)}%;background:${KCOL[k]}"></span>`).join('')}</div>
+  <div class="legend">${['TR','OB'].map(k=>`<div><span><span class="dot" style="background:${KCOL[k]};margin-right:6px"></span>${KIND[k]}</span><b>${fmt(r.t[k])} / ${fmt(REQ[k])}</b></div>`).join('')}</div>
+  <div class="note">Además de las troncales y obligatorias, el Plan 2000 exige ${fmt(FREE)} créditos de optativas y libre elección. Esta tabla no recoge cómo se reconocen, así que dependen de tu expediente. Las asignaturas marcadas «+ 1 optativa» solo se adaptan si también tienes superada una optativa del Plan 93.</div>
+  <div class="rtools"><label class="toggle" for="onlyp"><input type="checkbox" id="onlyp" ${onlyPending?'checked':''}> Ver solo lo pendiente</label><span style="flex:1"></span><button class="btn" type="button" id="copy">Copiar resumen</button></div><div id="copybox"></div>`;
 
-  const opLeft = REQ.OP - r.t.OP;
-  h += `<div class="note">El Grado exige ${REQ.OP} ECTS optativos, es decir, seis optativas. ${opLeft>0?`Te faltarían ${opLeft} ECTS optativos.`:'Los tendrías completos.'}
-    <label class="toggle" for="part" style="margin-top:8px;color:var(--ink)"><input type="checkbox" id="part" ${part?'checked':''}> Tengo reconocidos 6 ECTS de créditos de participación (cuentan como una optativa)</label></div>`;
-
-  if(r.excess.length) h += `<div class="note warn"><strong>Optativas que no computan.</strong> Superan el máximo de ${REQ.OP} ECTS optativos. Constarán en tu certificado académico, pero no cuentan para terminar el Grado:<ul>${r.excess.map(c=>`<li>${esc(CAT.get(c).nom)} <span class="code">${c}</span></li>`).join('')}</ul></div>`;
-
-  h += `<div class="rtools"><label class="toggle" for="onlyp"><input type="checkbox" id="onlyp" ${onlyPending?'checked':''}> Ver solo lo pendiente</label><span style="flex:1"></span><button class="btn" type="button" id="copy">Copiar resumen</button></div><div id="copybox"></div>`;
-
-  const opFull = opLeft<=0;
-  const rows = DATA.cat.map(g=>({...g, ok:r.counted.has(g.cod), exc:r.excess.includes(g.cod)}))
-    .filter(x=>!(onlyPending && (x.ok || x.exc)))
-    .filter(x=>!(onlyPending && x.car==='OP' && opFull))
-    .sort((a,b)=>semKey(a.sem)-semKey(b.sem) || a.nom.localeCompare(b.nom,'es'));
-  if(!rows.length) h += `<p class="empty">No te queda nada pendiente del Grado.</p>`;
+  const rows = DATA.tgt.map(g=>({...g, ok:r.via.has(g.cod)})).filter(x=>!(onlyPending && x.ok));
+  if(!rows.length) h += `<p class="empty">No te queda ninguna troncal ni obligatoria pendiente.</p>`;
   const groups = new Map();
-  rows.forEach(x=>{const g=semLabel(x.sem); if(!groups.has(g)) groups.set(g,[]); groups.get(g).push(x)});
+  rows.forEach(x=>{const g=`${x.curso}.º curso`; if(!groups.has(g)) groups.set(g,[]); groups.get(g).push(x)});
   for(const [g,list] of groups){
-    const done = list.filter(x=>x.ok).reduce((s,x)=>s+x.ects,0);
-    h += `<div class="rgroup"><h3><span>${esc(g)}${g==='Optativas'?' · 36 ECTS en total':''}</span><span>${done} ECTS reconocidos</span></h3>`;
+    const done = list.filter(x=>x.ok).reduce((s,x)=>s+x.cred,0);
+    h += `<div class="rgroup"><h3><span>${esc(g)}</span><span>${fmt(done)} créditos reconocidos</span></h3>`;
     for(const x of list){
       const from = r.via.get(x.cod);
-      const v = from ? `<span class="via">por ${from.map(l=>`${esc(l.nom)} <span class="code">${esc(l.cod)}</span>`).join(' · ')}</span>` : '';
-      const cls = x.ok?'ok':(x.exc?'exc':'pend'), mark = x.ok?'✓':(x.exc?'!':'○');
-      const lab = x.ok?'Reconocida':(x.exc?'Reconocida, no computa':'Pendiente');
-      h += `<div class="rrow ${cls}"><span class="st" aria-label="${lab}">${mark}</span>
+      const v = from ? `<span class="via">por ${from.map(s=>esc(s.nom)+(s.cod?` <span class="code">${esc(s.cod)}</span>`:'')).join(' · ')}</span>` : '';
+      h += `<div class="rrow ${x.ok?'ok':'pend'}"><span class="st" aria-label="${x.ok?'Reconocida':'Pendiente'}">${x.ok?'✓':'○'}</span>
         <span class="rn">${esc(x.nom)} <span class="code">${x.cod}</span>${v}</span>
-        <span class="chips"><span class="chip k-${x.car}">${x.car}</span><span class="chip">${x.ects}</span></span></div>`;
+        <span class="chips"><span class="chip k-${x.car}">${x.car}</span><span class="lcred">${fmt(x.cred)}</span></span></div>`;
     }
     h += `</div>`;
   }
   $('#result').innerHTML = h;
-  $('#mb-n').textContent = r.total;
+  $('#mb-n').textContent = fmt(r.total);
   $('#onlyp').onchange = e=>{onlyPending=e.target.checked; renderResult()};
-  $('#part').onchange = e=>{part=e.target.checked; store('lic-part',part); renderResult()};
   $('#copy').onclick = ()=>copySummary(r);
 }
 
 function copySummary(r){
   const L=[];
-  L.push('Simulación orientativa de adaptación: Licenciatura en Filosofía (Plan 2000) → Grado en Filosofía');
-  L.push(`ECTS reconocidos: ${r.total} de ${TOTAL} (FB ${r.t.FB}, OB ${r.t.OB}, OP ${r.t.OP}, TFG ${r.t.TFG}) · faltan ${TOTAL-r.total}`);
-  if(r.pc) L.push('Incluye 6 ECTS de créditos de participación computados como optativa.');
-  L.push('');
-  L.push('Asignaturas de Licenciatura superadas:');
-  [...sel].map(id=>LIC_BY_ID.get(id)).filter(Boolean).forEach(l=>L.push(`- ${l.cod} ${l.nom} (${fmt(l.cred)} créd.)`));
-  L.push('');
-  L.push('Asignaturas del Grado que se reconocerían:');
-  DATA.cat.filter(g=>r.counted.has(g.cod)).forEach(g=>L.push(`- ${g.cod} ${g.nom} (${g.ects} ECTS, ${g.car})`));
-  if(r.excess.length){ L.push(''); L.push('Optativas excedentes (no computan):'); r.excess.forEach(c=>L.push(`- ${c} ${CAT.get(c).nom}`)) }
+  L.push('Simulación orientativa de adaptación: Licenciatura en Filosofía, Plan 93 → Plan 2000');
+  L.push(`Créditos troncales y obligatorios reconocidos: ${fmt(r.total)} de ${fmt(CORE)} (troncales ${fmt(r.t.TR)}, obligatorias ${fmt(r.t.OB)}) · faltan ${fmt(CORE-r.total)}`);
+  L.push(`Optativas y libre elección (${fmt(FREE)} créditos): según expediente.`);
+  L.push(''); L.push('Asignaturas del Plan 93 superadas:');
+  [...sel].map(id=>SRC.get(id)).filter(Boolean).forEach(s=>L.push(`- ${s.cod?s.cod+' ':''}${s.nom}`));
+  L.push(''); L.push('Asignaturas del Plan 2000 que se reconocerían:');
+  DATA.tgt.filter(g=>r.via.has(g.cod)).forEach(g=>L.push(`- ${g.cod} ${g.nom} (${fmt(g.cred)} créd., ${g.car==='TR'?'troncal':'obligatoria'})`));
   L.push(''); L.push('Simulación orientativa. La resolución corresponde a la Facultad de Filosofía.');
-  const text = L.join('\n');
+  const text=L.join('\n');
   const fallback=()=>{$('#copybox').innerHTML='<textarea class="fallback" id="fb" readonly></textarea>'; const t=$('#fb'); t.value=text; t.focus(); t.select(); toast('Selecciona el texto y cópialo')};
   try{ navigator.clipboard.writeText(text).then(()=>toast('Resumen copiado'),fallback) }catch(e){ fallback() }
 }
 function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),1800)}
 
-/* ---------- eventos ---------- */
-function save(){ store('lic-sel',[...sel]) }
-$('#orig').addEventListener('change',e=>{
-  if(e.target.type!=='checkbox') return;
-  e.target.checked ? sel.add(e.target.value) : sel.delete(e.target.value);
-  save(); renderResult();
-});
+function save(){ store('p93-sel',[...sel]) }
+$('#orig').addEventListener('change',e=>{ if(e.target.type!=='checkbox') return; e.target.checked?sel.add(e.target.value):sel.delete(e.target.value); save(); renderResult() });
 $('#orig').addEventListener('click',e=>{
-  const g = e.target.dataset && e.target.dataset.all; if(!g) return;
+  const g=e.target.dataset&&e.target.dataset.all; if(!g) return;
   const boxes=[...document.querySelectorAll(`label.item[data-g="${CSS.escape(g)}"] input`)];
-  const allOn = boxes.every(b=>b.checked);
-  boxes.forEach(b=>{ b.checked=!allOn; !allOn ? sel.add(b.value) : sel.delete(b.value) });
+  const allOn=boxes.every(b=>b.checked);
+  boxes.forEach(b=>{ b.checked=!allOn; !allOn?sel.add(b.value):sel.delete(b.value) });
   save(); renderResult();
 });
 $('#q').addEventListener('input',renderOrigin);
 $('#clear').onclick=()=>{ sel.clear(); save(); renderOrigin(); renderResult() };
-$('#example').onclick=()=>{
-  sel.clear(); LIC.forEach(l=>{ if(l.curso && l.curso<=3) sel.add(l.id) });
-  save(); renderOrigin(); renderResult(); toast('Ejemplo: primer ciclo de la Licenciatura superado');
-};
+$('#example').onclick=()=>{ sel.clear(); DATA.src.forEach(s=>{ if(s.curso<=3) sel.add(s.id) }); save(); renderOrigin(); renderResult(); toast('Ejemplo: asignaturas equivalentes a 1.º, 2.º y 3.º del Plan 2000') };
 $('#mb-go').onclick=()=>$('#result').scrollIntoView({behavior:'smooth'});
 
-const firstVisit = !sel.size;
+const firstVisit=!sel.size;
 renderOrigin(); renderResult();
 if(firstVisit) $('#example').click();
 </script>
