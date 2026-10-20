@@ -104,6 +104,21 @@ textarea.fallback{width:100%;min-height:160px;font-family:var(--f-mono);font-siz
 .chip.k-TR{color:var(--accent)}
 </style>
 
+
+<style>
+.legend b{white-space:nowrap}
+.legend{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.recon{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:4px 0 14px;background:color-mix(in srgb,var(--ok-soft) 45%,var(--surface))}
+.recon h3{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:600}
+.recon .rk{margin-top:10px}
+.recon .rk:first-of-type{margin-top:0}
+.recon .rkh{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;margin-bottom:4px}
+.recon .rkh span.n{margin-left:auto;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}
+.recon ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:2px 14px}
+.recon li{font-size:13.5px;padding:2px 0 2px 16px;position:relative;min-width:0}
+.recon li::before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:700}
+.rrow.ok{background:color-mix(in srgb,var(--ok-soft) 70%,transparent);margin:0 -8px;padding-left:8px;padding-right:8px;border-radius:4px}
+</style>
 <div class="wrap">
   <header>
     <span class="eyebrow">Facultad de Filosofía · Secretaría de Estudiantes</span>
@@ -247,6 +262,45 @@ $('#clear').onclick=()=>{ sel.clear(); save(); renderOrigin(); renderResult() };
 $('#example').onclick=()=>{ sel.clear(); DATA.src.forEach(s=>{ if(s.curso<=3) sel.add(s.id) }); save(); renderOrigin(); renderResult(); toast('Ejemplo: asignaturas equivalentes a 1.º, 2.º y 3.º del Plan 2000') };
 $('#mb-go').onclick=()=>$('#result').scrollIntoView({behavior:'smooth'});
 
+
+/* Bloque resumen de asignaturas reconocidas, construido a partir de la lista del plan */
+function addRecon(){
+  const res=document.getElementById('result'); if(!res) return;
+  const old=res.querySelector('.recon'); if(old) old.remove();
+  const wasOnly=document.getElementById('onlyp')&&document.getElementById('onlyp').checked;
+  const NAMES={FB:'Formación básica',TR:'Troncales',OB:'Obligatorias',OP:'Optativas',TFG:'Trabajo Fin de Grado'};
+  const groups={};
+  RECON.forEach(x=>{(groups[x.car]=groups[x.car]||[]).push(x)});
+  const keys=['FB','TR','OB','OP','TFG'].filter(k=>groups[k]);
+  if(!keys.length) return;
+  const n=RECON.length;
+  let h=`<h3>Asignaturas reconocidas (${n})</h3>`;
+  for(const k of keys){
+    const sum=groups[k].reduce((s,x)=>s+x.cr,0);
+    h+=`<div class="rk"><div class="rkh"><span class="dot" style="background:${(typeof KCOL!=='undefined'&&KCOL[k])||'var(--muted)'}"></span>${NAMES[k]}<span class="n">${String(Math.round(sum*10)/10).replace('.',',')}</span></div><ul>${groups[k].map(x=>`<li>${x.nom}</li>`).join('')}</ul></div>`;
+  }
+  const box=document.createElement('div'); box.className='recon'; box.innerHTML=h;
+  const after=res.querySelector('.legend'); if(after) after.after(box);
+}
+let RECON=[];
+function collectRecon(html){
+  // lee las filas reconocidas de la lista completa del plan (sin filtrar)
+  const tmp=document.createElement('div'); tmp.innerHTML=html;
+  RECON=[...tmp.querySelectorAll('.rrow.ok')].map(r=>{
+    const rn=r.querySelector('.rn'); const chips=r.querySelectorAll('.chips > *');
+    const k=[...chips[0].classList].find(c=>c.startsWith('k-'));
+    return {nom:rn.firstChild.textContent.trim().replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])), car:k?k.slice(2):'OB', cr:parseFloat(chips[chips.length-1].textContent.replace(',','.'))||0};
+  });
+}
+
+const _renderResult = renderResult;
+renderResult = function(){
+  const op = onlyPending;
+  onlyPending = false; _renderResult();
+  collectRecon(document.getElementById('result').innerHTML);
+  onlyPending = op; if(op) _renderResult();
+  addRecon();
+};
 const firstVisit=!sel.size;
 renderOrigin(); renderResult();
 if(firstVisit) $('#example').click();
